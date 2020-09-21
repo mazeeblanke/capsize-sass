@@ -56,7 +56,8 @@ async function getFontInfo({ url, prev, prefix }) {
       console.log({ err })
     })
   } else {
-    let to = require.resolve(href)
+    const rootSassDir = prev.replace(/\/[a-zA-Z0-9]+\.scss/, '')
+    let to = require.resolve(path.resolve(rootSassDir, href))
     fontMetrics = await fromFile(to).catch(err => {
       console.log({ err })
     })
