@@ -1,17 +1,32 @@
 {
   "name": "capsize-sass",
   "version": "1.0.0",
-  "description": "",
+  "description": "> Capsize makes the sizing and layout of text as predictable as every other element on the screen. > > Using font metadata, text can now be sized according to the height of its capital letters while trimming the space above capital letters and below the baseline.",
   "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "mazinoukah",
+  "license": "MIT",
   "dependencies": {
     "blob-to-buffer": "^1.2.8",
     "cross-fetch": "^3.0.5",
     "fontkit": "^1.8.1",
     "md5": "^2.3.0"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mazeeblanke/capsize-sass.git"
+  },
+  "keywords": [
+    "capsize",
+    "sass-capsize",
+    "fonts",
+    "scss",
+    "sass"
+  ],
+  "bugs": {
+    "url": "https://github.com/mazeeblanke/capsize-sass/issues"
+  },
+  "homepage": "https://github.com/mazeeblanke/capsize-sass#readme"
 }
