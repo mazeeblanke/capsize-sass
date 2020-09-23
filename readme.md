@@ -18,7 +18,7 @@ It also removes the need for any runtime javascript. All credit goes to the orig
 <br/>
 
 ```
-$ npm i capsize-sass
+$ npm i capsize-scss
 ```
 
 <br/>
