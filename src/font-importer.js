@@ -7,6 +7,7 @@ let ttfFont = /\.ttf/
 let woffFont = /\.(woff|woff2)/
 let remoteUrl = /^https?:\/\//
 let whitespace = /\\n */g
+let defaulFontFallbacks = '"sans-serif", "serif"'
 
 const SAVE_FOLDER = process.cwd() + "/.cache"
 const SAVE_FILE = name => SAVE_FOLDER + `/${package.version}.${md5(name)}.json`
@@ -57,7 +58,7 @@ async function getFontInfo({ url, prev, prefix }) {
     return cached
   }
 
-  let { name: family, italic, ...rest } = parseQuery(url)
+  let { name: family, italic, fallbacks, ...rest } = parseQuery(url)
 
   let href = url.replace(/\?.*/, "")
 
@@ -115,7 +116,7 @@ async function getFontInfo({ url, prev, prefix }) {
 
       @font-face {
         src: ${await generateFontSource(href, rootSassDir)};
-        font-family: ${family};
+        font-family: "${family}";
         ${italic ? "font-style: italic;" : ""}
         font-weight: ${weight};
       }
@@ -126,7 +127,7 @@ async function getFontInfo({ url, prev, prefix }) {
 
 
       @mixin ${prefix}${name()} ($fontSize: false, $lineGap: false, $lineHeight: false, $letterSpacing: false, $leading: false, $capHeight: false, $weight: 400, $italic: false) {
-        font-family: ${family}, var(--${name()}-stack, var(--${family}-stack));
+        font-family: "${family}", ${fallbacks || defaulFontFallbacks};
         ${italic ? "font-style: italic;" : ""}
         ${weight !== 400 ? `font-weight: ${weight};` : ""}
         @if $fontSize != false and $lineHeight != false {
