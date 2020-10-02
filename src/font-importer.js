@@ -3,7 +3,7 @@ const { fromFile, fromUrl } = require("./get-font-metrics")
 const md5 = require("md5")
 const package = require("../package.json")
 
-let font = /\.ttf/
+let font = /\.(ttf|woff|woff2)/
 let remoteUrl = /^https?:\/\//
 let whitespace = /\\n */g
 
