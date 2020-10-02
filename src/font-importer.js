@@ -3,7 +3,8 @@ const { fromFile, fromUrl } = require("./get-font-metrics")
 const md5 = require("md5")
 const package = require("../package.json")
 
-let font = /\.(ttf|woff|woff2)/
+let ttfFont = /\.ttf/
+let woffFont = /\.(woff|woff2)/
 let remoteUrl = /^https?:\/\//
 let whitespace = /\\n */g
 
@@ -27,9 +28,28 @@ async function loadResult(url) {
   }
 }
 
+async function generateFontSource(href, rootSassDir) {
+  if (ttfFont.test(href)) {
+    return `
+      url(${href}) format('truetype')
+    `;
+  }
+
+  if (woffFont.test(href)) {
+    let woffHrefs= ['woff', 'woff2'].map((type) => {
+      if (!require.resolve(path.resolve(rootSassDir, href))) throw new Error(`${type} font not found!`)
+      return `url(${href.replace(woffFont, `.${type}`)}) format(${type})`;
+    })
+    return woffHrefs.join(', ');
+  }
+}
+
 async function getFontInfo({ url, prev, prefix }) {
   // This generates a stylesheet from scratch for `@import "foo.ttf"`.
-  if (!(font.test(url) && url.includes("?"))) return null
+  const fontIsSupported = ttfFont.test(url) || woffFont.test(url);
+  if (!(fontIsSupported && url.includes("?"))) return null
+
+  const rootSassDir = prev.replace(/\/[a-zA-Z0-9]+\.scss/, '')
 
   let cached = await loadResult(url)
 
@@ -56,7 +76,6 @@ async function getFontInfo({ url, prev, prefix }) {
       console.log({ err })
     })
   } else {
-    const rootSassDir = prev.replace(/\/[a-zA-Z0-9]+\.scss/, '')
     let to = require.resolve(path.resolve(rootSassDir, href))
     fontMetrics = await fromFile(to).catch(err => {
       console.log({ err })
@@ -95,7 +114,7 @@ async function getFontInfo({ url, prev, prefix }) {
       $preventCollapse: 0.05;
 
       @font-face {
-        src: url(${href});
+        src: ${await generateFontSource(href, rootSassDir)};
         font-family: ${family};
         ${italic ? "font-style: italic;" : ""}
         font-weight: ${weight};
