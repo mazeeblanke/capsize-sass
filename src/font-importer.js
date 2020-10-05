@@ -32,14 +32,14 @@ async function loadResult(url) {
 async function generateFontSource(href, rootSassDir) {
   if (ttfFont.test(href)) {
     return `
-      url(${href}) format('truetype')
+      url(${href}) format("truetype")
     `;
   }
 
   if (woffFont.test(href)) {
     let woffHrefs= ['woff', 'woff2'].map((type) => {
       if (!require.resolve(path.resolve(rootSassDir, href))) throw new Error(`${type} font not found!`)
-      return `url(${href.replace(woffFont, `.${type}`)}) format(${type})`;
+      return `url(${href.replace(woffFont, `.${type}`)}) format("${type}")`;
     })
     return woffHrefs.join(', ');
   }
